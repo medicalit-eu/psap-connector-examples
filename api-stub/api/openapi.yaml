@@ -1,0 +1,1101 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: mdybal@medicalit.eu
+    name: Martin Dybal
+  title: NG SOS Psap Connector server
+  version: 2.0.0
+  x-logo:
+    altText: NG SOS Logo
+    url: https://apidoc.ng-sos.com/logo.svg
+servers:
+- url: /
+security:
+- Bearer: []
+paths:
+  /about:
+    get:
+      operationId: About
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.About.VersionResponse"
+          description: Success
+      tags:
+      - About
+      x-eov-operation-handler: controllers/AboutController
+  /v2/incident/{id}/region:
+    post:
+      description: "This generally occurs whenever caller's position is altered significantly\
+        \ - spanning into another region or another emergency service was requested.\r\
+        \n\r\nRequires incident.update privileges"
+      operationId: AddPsap
+      parameters:
+      - description: Incident id.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v2.AddPsapBody"
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+      summary: Incident PSAP was added.
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+  /v2/incident/{id}:
+    post:
+      description: Requires incident.close privileges
+      operationId: Close
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v2.CloseIncidentBody"
+        description: Incident id.
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+        "200":
+          description: Success
+      summary: Incident was closed.
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+  /v2/incident:
+    post:
+      description: Requires incident.create privileges
+      operationId: Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v2.CreateIncidentBody"
+      responses:
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+        "201":
+          content:
+            application/json:
+              schema:
+                example: 00000000-0000-0000-0000-000000000000
+                format: uuid
+                type: string
+          description: Created
+      summary: Incident was created.
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+  /v2/incident/{id}/position:
+    post:
+      description: Requires incident.update privileges
+      operationId: UpdatePosition
+      parameters:
+      - description: Incident id.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v1.UpdatePositionBody"
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+      summary: Incident position was updated. Received a more accurate position.
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+    put:
+      description: Requires incident.update privileges
+      operationId: ReplacePosition
+      parameters:
+      - description: Incident id.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v1.UpdatePositionBody"
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+      summary: Incident position was replaced. Invalidates previous position(s).
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+  /v2/incident/{id}/battery-level:
+    patch:
+      description: Requires incident.update privileges
+      operationId: UpdateBatteryLevel
+      parameters:
+      - description: Incident id.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v1.UpdateBatteryLevelBody"
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+      summary: Incident battery level was updated.
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+  /v2/incident/{id}/internet-connection-type:
+    patch:
+      description: Requires incident.update privileges
+      operationId: UpdateInternetConnectionType
+      parameters:
+      - description: Incident id.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v1.UpdateInternetConnectionTypeBody"
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+          description: Forbidden
+        "500":
+          description: Server Error
+      summary: Incident internet connection type was updated.
+      tags:
+      - Incident
+      x-eov-operation-handler: controllers/IncidentController
+components:
+  schemas:
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      additionalProperties: true
+      example:
+        instance: instance
+        detail: detail
+        type: type
+        title: title
+        status: 0
+      properties:
+        type:
+          nullable: true
+          type: string
+        title:
+          nullable: true
+          type: string
+        status:
+          format: int32
+          nullable: true
+          type: integer
+        detail:
+          nullable: true
+          type: string
+        instance:
+          nullable: true
+          type: string
+      type: object
+    NG_SOS.Abstractions.EmergencyServiceType:
+      enum:
+      - EmergencyMedicalService
+      - FireRescueServices
+      - Police
+      - MountainRescueService
+      - WaterRescueService
+      - CoastGuard
+      - All
+      type: string
+    NG_SOS.Abstractions.Geography.GeoPoint:
+      additionalProperties: true
+      description: Representation of a geographic point using WGS84.
+      properties:
+        latitude:
+          description: Latitude coordinate.
+          example: 49.179478
+          format: double
+          type: number
+        longitude:
+          description: Longitude coordinate.
+          example: 17.537876
+          format: double
+          type: number
+      type: object
+    NG_SOS.Abstractions.Geography.Position:
+      additionalProperties: true
+      properties:
+        latitude:
+          description: Latitude coordinate.
+          example: 49.179478
+          format: double
+          type: number
+        longitude:
+          description: Longitude coordinate.
+          example: 17.537876
+          format: double
+          type: number
+        captureAtUtc:
+          description: Timestamp (in UTC) determining when was the position captured.
+          format: date-time
+          type: string
+        accuracy:
+          description: Accuracy expressed in meters.
+          example: 32.83
+          format: double
+          type: number
+        altitude:
+          description: Distance above sea level expressed in meters.
+          example: 264
+          format: double
+          type: number
+      type: object
+    NG_SOS.Incidents.Domain.AppInfo:
+      additionalProperties: true
+      description: Information about an application.
+      properties:
+        code:
+          description: Application code. This information is used to distinguish national
+            and regional applications.
+          example: CZ
+          type: string
+        type:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.AppType"
+          description: "Application type. This information is used to distinguish\
+            \ between web, mobile and IOT applications."
+        version:
+          description: Application version.
+          example: 1.0.0
+          type: string
+        language:
+          description: Application language.
+          example: cs
+          type: string
+      type: object
+    NG_SOS.Incidents.Domain.AppType:
+      enum:
+      - Mobile
+      - Web
+      - IOT
+      type: string
+    NG_SOS.Incidents.Domain.Caller:
+      additionalProperties: true
+      properties:
+        phoneNumbers:
+          description: Registered phone numbers.
+          example:
+          - "+420775123456"
+          items:
+            $ref: "#/components/schemas/NG_SOS.Infrastructure.PhoneNumber"
+          type: array
+        fullname:
+          description: Full name.
+          example: Hal Finney
+          nullable: true
+          type: string
+        gender:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.Gender"
+          description: Gender.
+          example: Male
+        email:
+          description: Email address.
+          example: hal@finney.org
+          nullable: true
+          type: string
+        insuranceNumber:
+          description: Insurance number.
+          example: "9305121234"
+          nullable: true
+          type: string
+        languages:
+          description: Languages caller is able to speak or at least understands passively.
+          example:
+          - en
+          items:
+            type: string
+          type: array
+        age:
+          description: Age.
+          example: 53
+          format: int32
+          nullable: true
+          type: integer
+        permanentResidence:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.PermanentResidence"
+          description: Permanent residence.
+          nullable: true
+        contacts:
+          description: Emergency contacts.
+          items:
+            $ref: "#/components/schemas/NG_SOS.Incidents.Domain.CallerContact"
+          type: array
+        medicData:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.CallerMedicData"
+          description: Medical information about a caller.
+          nullable: true
+        temporaryInformation:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.CallerTemporaryInformation"
+          description: Temporary (time-limited) information.
+          nullable: true
+      type: object
+    NG_SOS.Incidents.Domain.CallerContact:
+      additionalProperties: true
+      description: Contact information.
+      properties:
+        name:
+          description: Contact name.
+          example: Satoshi Nakamoto
+          type: string
+        phoneNumber:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Infrastructure.PhoneNumber"
+          description: Phone number.
+        email:
+          description: Email address.
+          example: satoshi@vistomail.com
+          nullable: true
+          type: string
+        description:
+          description: Description of the contact.
+          example: My alter ego
+          nullable: true
+          type: string
+      type: object
+    NG_SOS.Incidents.Domain.CallerMedicData:
+      additionalProperties: true
+      description: Medical information about a caller.
+      properties:
+        hearingImpairment:
+          description: Indication that the caller is suffering from either a partial
+            or total inability to hear sounds.
+          example: false
+          type: boolean
+        blind:
+          description: Indication that the caller is blind.
+          example: false
+          type: boolean
+        diabetes:
+          description: Indication that the caller suffers from diabetes.
+          example: false
+          type: boolean
+        speechDefect:
+          description: Indication that the caller has a speech disorder.
+          example: false
+          type: boolean
+        heart:
+          description: Indication that the caller has heart problem(s).
+          example: false
+          type: boolean
+        lungs:
+          description: Indication that the caller has problem(s) with lungs.
+          example: false
+          type: boolean
+        regularPrescription:
+          description: User text field. Regular prescription. Medications that the
+            caller takes on regular basis.
+          example: "Riluzole, Zodac 10mg"
+          type: string
+        other:
+          description: User text field. Indication that the caller has some other
+            problem(s) that are not covered by other categories.
+          example: I have been diagnosed with amyotrophic lateral sclerosis (ALS)
+          nullable: true
+          type: string
+        lastUpdatedUtc:
+          description: Timestamp (in UTC) determining the last update of medical data.
+          format: date-time
+          type: string
+      type: object
+    NG_SOS.Incidents.Domain.CallerTemporaryInformation:
+      additionalProperties: true
+      description: Temporary (time-limited) information.
+      properties:
+        message:
+          description: Temporary information.
+          example: I'm using non-invasive ventilation.
+          type: string
+        validUntilUtc:
+          description: Timestamp (in UTC) that determines the end of validity period
+            for this information.
+          format: date-time
+          type: string
+      type: object
+    NG_SOS.Incidents.Domain.Classification:
+      additionalProperties: true
+      description: Classification of an incident.
+      properties:
+        hardInjury:
+          description: Indication that subject suffered a hard injury.
+          example: false
+          type: boolean
+        carAccident:
+          description: Indication that subject has been in a car accident.
+          example: false
+          type: boolean
+        heartIssue:
+          description: Indication that subject has chest pains and/or problems with
+            heart.
+          example: false
+          type: boolean
+        bleeding:
+          description: Indication that subject is bleeding.
+          example: false
+          type: boolean
+        allergic:
+          description: Indication that subject has an allergic reaction.
+          example: false
+          type: boolean
+        breathingIssue:
+          description: Indication that subject has difficulties with breathing.
+          example: false
+          type: boolean
+        otherProblem:
+          description: Indication that subject has some other problem that is not
+            covered by other categories.
+          example: false
+          type: boolean
+        unconsciousness:
+          description: Indication that subject is unconscious.
+          example: false
+          type: boolean
+        witness:
+          description: Indication that caller is a witness and calling on behalf of
+            a subject in need of medical attention.
+          example: false
+          type: boolean
+        avalanche:
+          description: Indication that subject has been in an avalanche.
+          example: false
+          type: boolean
+        deadlock:
+          description: Indication that subject got stuck (is in deadlock).
+          example: false
+          type: boolean
+        lost:
+          description: Indication that subject got lost.
+          example: false
+          type: boolean
+        mountainInjury:
+          description: Indication that subject suffered an injury in mountains.
+          example: false
+          type: boolean
+      type: object
+    NG_SOS.Incidents.Domain.DeviceInfo:
+      additionalProperties: true
+      description: Information about a device.
+      properties:
+        deviceId:
+          description: Device identifier.
+          example: 7cdd92e59411540c
+          nullable: true
+          type: string
+        deviceName:
+          description: Device name.
+          example: iPhone13 mini
+          nullable: true
+          type: string
+        manufacturer:
+          description: Device manufacturer.
+          example: Apple
+          nullable: true
+          type: string
+        batteryLevel:
+          description: Current battery level.
+          example: 85.7
+          format: double
+          nullable: true
+          type: number
+        system:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.DeviceOs"
+          description: Operating system that is running on the device.
+          example: iOS
+        systemVersion:
+          description: Version of the operating system that is running on the device.
+          example: 15.1.0
+          nullable: true
+          type: string
+        internetConnectionType:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.InternetConnectionType"
+          description: "Internet connection type.\r\nNote that this enum might be\
+            \ expanded with new values in future."
+          example: G5
+      type: object
+    NG_SOS.Incidents.Domain.DeviceOs:
+      enum:
+      - Unknown
+      - iOS
+      - Android
+      - WindowsPhone
+      type: string
+    NG_SOS.Incidents.Domain.Gender:
+      enum:
+      - Unknown
+      - Male
+      - Female
+      - Other
+      type: string
+    NG_SOS.Incidents.Domain.InternetConnectionType:
+      enum:
+      - Unknown
+      - NoConnection
+      - WiFi
+      - G2
+      - G3
+      - G4
+      - G5
+      type: string
+    NG_SOS.Incidents.Domain.PermanentResidence:
+      additionalProperties: true
+      description: Information about permanent residence.
+      properties:
+        userAddressLine1:
+          description: User-supplied textual address information
+          example: "Vachova 43/5, 602 00 Brno"
+          type: string
+        userAddressLine2:
+          description: Additional clarification for the first provided address line.
+          example: "1st floor, apartment to the right"
+          type: string
+        geoPoint:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Abstractions.Geography.GeoPoint"
+          description: Geographic point.
+          nullable: true
+      type: object
+    NG_SOS.Infrastructure.PhoneNumber:
+      additionalProperties: true
+      properties:
+        value:
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.About.VersionResponse:
+      additionalProperties: true
+      example:
+        supportsIncidentReplacePosition: true
+        supportsIncidentUpdateInternetConnectionType: true
+        supportedGender:
+        - Unknown
+        - Male
+        - Female
+        - Other
+        version: 2.0.0
+        supportsIncidentCreate: true
+        supportsIncidentAddRegion: true
+        allowsMonitoring: true
+        supportedDeviceOs:
+        - Unknown
+        - iOS
+        - Android
+        - WindowsPhone
+        supportsIncidentUpdatePosition: true
+        supportedAppTypes:
+        - Mobile
+        - Web
+        - IOT
+        supportsIncidentAddActivatedEmergencyService: true
+        supportedInternetConnectionTypes:
+        - Unknown
+        - WiFi
+        - G2
+        - G3
+        - G4
+        - G5
+        supportedEmergencyServiceTypes:
+        - EmergencyMedicalService
+        - FireRescueServices
+        - Police
+        - MountainRescueService
+        - WaterRescueService
+        - CoastGuard
+        supportsIncidentUpdateBatteryLevel: true
+      properties:
+        version:
+          description: Version of the implemented Psap open api.
+          example: 2.0.0
+          type: string
+        supportsIncidentCreate:
+          description: Indication that this implementation supports POST /v1?/incident?
+            endpoint.
+          type: boolean
+        supportsIncidentUpdatePosition:
+          description: "Indication that this implementation supports POST /v1?/incident?/{id}?/position\
+            \ endpoint."
+          type: boolean
+        supportsIncidentReplacePosition:
+          description: "Indication that this implementation supports PUT /v1?/incident?/{id}?/position\
+            \ endpoint."
+          type: boolean
+        supportsIncidentAddRegion:
+          description: "Indication that this implementation supports PUT /v1?/incident?/{id}?/region\
+            \ endpoint."
+          type: boolean
+        supportsIncidentAddActivatedEmergencyService:
+          description: "Indication that this implementation supports PUT /v1?/incident?/{id}?/activated-emergency-service\
+            \ endpoint."
+          type: boolean
+        supportsIncidentUpdateInternetConnectionType:
+          description: "Indication that this implementation supports PUT /v1?/incident?/{id}?/internet-connection-type\
+            \ endpoint."
+          type: boolean
+        supportsIncidentUpdateBatteryLevel:
+          description: "Indication that this implementation supports PUT /v1?/incident?/{id}?/battery-level\
+            \ endpoint."
+          type: boolean
+        supportedAppTypes:
+          description: List of supported Application Types.
+          example:
+          - Mobile
+          - Web
+          - IOT
+          items:
+            $ref: "#/components/schemas/NG_SOS.Incidents.Domain.AppType"
+          type: array
+        supportedInternetConnectionTypes:
+          description: "List of supported Internet Connection Types.\r\nNote that\
+            \ for cellular network connections, such as 3G, we use reversed identifiers\
+            \ (G3) for better mapping to programming languages."
+          example:
+          - Unknown
+          - WiFi
+          - G2
+          - G3
+          - G4
+          - G5
+          items:
+            $ref: "#/components/schemas/NG_SOS.Incidents.Domain.InternetConnectionType"
+          readOnly: true
+          type: array
+        supportedDeviceOs:
+          description: List of supported Device Operating Systems.
+          example:
+          - Unknown
+          - iOS
+          - Android
+          - WindowsPhone
+          items:
+            $ref: "#/components/schemas/NG_SOS.Incidents.Domain.DeviceOs"
+          type: array
+        supportedGender:
+          description: List of supported Genders.
+          example:
+          - Unknown
+          - Male
+          - Female
+          - Other
+          items:
+            $ref: "#/components/schemas/NG_SOS.Incidents.Domain.Gender"
+          type: array
+        supportedEmergencyServiceTypes:
+          description: List of supported Emergency Service Types.
+          example:
+          - EmergencyMedicalService
+          - FireRescueServices
+          - Police
+          - MountainRescueService
+          - WaterRescueService
+          - CoastGuard
+          items:
+            $ref: "#/components/schemas/NG_SOS.Abstractions.EmergencyServiceType"
+          type: array
+        allowsMonitoring:
+          description: "Indication that this implementation allows monitoring of its\
+            \ endpoint.\r\nThis means periodic availability checking, for example\
+            \ using ICMP messages (ping) or by sending test incidents."
+          type: boolean
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v1.Region:
+      additionalProperties: true
+      description: Region information.
+      properties:
+        id:
+          description: "Region identifier.\r\nThis represents an unique region identifier\
+            \ across the whole world."
+          example: 00000000-0000-0000-0000-000000000000
+          format: uuid
+          type: string
+        shortcut:
+          description: "Region shortcut.\r\nThis represents an unique region shortcut\
+            \ within a single country."
+          example: ZK
+          type: string
+        name:
+          description: Region name.
+          example: Zlï¿½nskï¿½ kraj
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v1.UpdateBatteryLevelBody:
+      additionalProperties: true
+      properties:
+        batteryLevel:
+          description: New battery level.
+          example: 85.7
+          format: double
+          type: number
+        requestTimeStampUtc:
+          format: date-time
+          type: string
+        requestId:
+          format: uuid
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v1.UpdateInternetConnectionTypeBody:
+      additionalProperties: true
+      properties:
+        internetConnectionType:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.InternetConnectionType"
+        requestTimeStampUtc:
+          format: date-time
+          type: string
+        requestId:
+          format: uuid
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v1.UpdatePositionBody:
+      additionalProperties: true
+      properties:
+        position:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Abstractions.Geography.Position"
+          description: New position.
+        requestTimeStampUtc:
+          format: date-time
+          type: string
+        requestId:
+          format: uuid
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v2.AddPsapBody:
+      additionalProperties: true
+      properties:
+        psap:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v2.Psap"
+          description: PSAP information.
+        requestTimeStampUtc:
+          format: date-time
+          type: string
+        requestId:
+          format: uuid
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v2.CloseIncidentBody:
+      additionalProperties: true
+      properties:
+        requestTimeStampUtc:
+          format: date-time
+          type: string
+        requestId:
+          format: uuid
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v2.CreateIncidentBody:
+      additionalProperties: true
+      properties:
+        id:
+          description: Incident id.
+          example: 00000000-0000-0000-0000-000000000000
+          format: uuid
+          type: string
+        createdTimeUtc:
+          description: "Timestamp (in UTC) that determines the beginning of the incident.\r\
+            \nThis represents the exact time that the incident was received by the\
+            \ emergency message server (EMS)."
+          format: date-time
+          type: string
+        appInfo:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.AppInfo"
+          description: Information about caller's application that was used to create
+            the incident.
+        caller:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.Caller"
+          description: Information about the caller.
+        classification:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.Classification"
+          description: "Incident classification. Caller can describe their or someone\
+            \ else's condition using images/pictograms and corresponding textual descriptions.\r\
+            \nThis information is intended to be used mainly by hearing-impaired people.\
+            \ However, it is also commonly used by foreigners that do not speak the\
+            \ local language."
+          nullable: true
+        deviceInfo:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Incidents.Domain.DeviceInfo"
+          description: Information about caller's device.
+        position:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Abstractions.Geography.Position"
+          description: Caller's position.
+          nullable: true
+        psaps:
+          description: "PSAPs notified about this incident. This information is calculated\
+            \ based on caller's position and requested emergency services.\r\nWhenever\
+            \ an incident is created with multiple PSAPs, it means that the caller\
+            \ is:\r\n    1) Close to multiple areas that are operated by different\
+            \ PSAPs or\r\n    2) Within a single area that is operated by different\
+            \ PSAPs, which provide different emergency services or\r\n    3) Combination\
+            \ of above"
+          items:
+            $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v2.Psap"
+          type: array
+        activatedEmergencyServices:
+          description: Types of rescue services that were notified about this incident.
+          example:
+          - EmergencyMedicalService
+          - MountainRescueService
+          items:
+            $ref: "#/components/schemas/NG_SOS.Abstractions.EmergencyServiceType"
+          type: array
+        isTest:
+          description: Indication that incident is for test purposes only.
+          type: boolean
+        requestTimeStampUtc:
+          format: date-time
+          type: string
+        requestId:
+          format: uuid
+          type: string
+      type: object
+    NG_SOS.Psaps.Api.Abstractions.v2.Psap:
+      additionalProperties: true
+      description: PSAP information.
+      properties:
+        id:
+          description: "PSAP identifier.\r\nThis represents an unique region identifier\
+            \ across the whole world."
+          example: 00000000-0000-0000-0000-000000000000
+          format: uuid
+          type: string
+        name:
+          description: PSAP display name.
+          type: string
+        region:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Psaps.Api.Abstractions.v1.Region"
+          description: "Region information.\r\nThis represents a region where this\
+            \ PSAP operates."
+          nullable: true
+        emergencyService:
+          allOf:
+          - $ref: "#/components/schemas/NG_SOS.Abstractions.EmergencyServiceType"
+          description: Declaring emergency service provided by this PSAP.
+          example: EmergencyMedicalService
+      type: object
+  securitySchemes:
+    Bearer:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
