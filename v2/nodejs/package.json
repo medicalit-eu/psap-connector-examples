@@ -1,0 +1,14 @@
+{
+  "name": "psap-connector-nodejs",
+  "version": "1.0.0",
+  "description": "Sample NG SOS PSAP connector server implementation.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jose": "^5.2.4"
+  }
+}
