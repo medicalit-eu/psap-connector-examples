@@ -5,7 +5,7 @@ If OpenAPI specification changes, server has to be regenerated using command bel
 - To allow additional properties in requests it is needed to update openapi specification file.
     - Search and replace:
       1. *"additionalProperties": false* -> *additionalProperties": true*
-      1. *"additionalProperties": { }* -> *additionalProperties": true*
+      2. *"additionalProperties": { }* -> *additionalProperties": true*
 
 ## Api stub generation
 - Api was generated using command: `docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate -i /local/open-api-psap-connector.json -g nodejs-express-server -o /local/api-stub`
