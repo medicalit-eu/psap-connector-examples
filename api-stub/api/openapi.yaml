@@ -490,7 +490,7 @@ components:
           example:
           - "+420775123456"
           items:
-            $ref: "#/components/schemas/NG_SOS.Infrastructure.PhoneNumber"
+            type: string
           type: array
         fullname:
           description: Full name.

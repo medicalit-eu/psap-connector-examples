@@ -712,7 +712,7 @@
           "phoneNumbers": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/NG_SOS.Infrastructure.PhoneNumber"
+              "type": "string"
             },
             "description": "Registered phone numbers.",
             "example": [
