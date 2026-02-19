@@ -1,6 +1,7 @@
 import express from 'express';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { randomUUID } from 'crypto';
+import { createMetronome } from './cprMetronome.js';
 
 const app = express();
 const port = Number.parseInt(process.env.PORT ?? '3000', 10);
@@ -117,6 +118,38 @@ app.patch('/v2/incident/:id/internet-connection-type', authenticate, (req, res) 
     `incident ${req.params.id} internet connection type updated. New connection ${req.body?.internetConnectionType ?? null}.`
   );
   res.sendStatus(200);
+});
+
+app.post('/v2/incident/:id/tanr/metronome', authenticate, (req, res) => {
+  const compressions = req.body?.compressions;
+  const breaths = req.body?.breaths;
+  const singleRescuer = req.body?.singleRescuer ?? false;
+
+  if (compressions == null || breaths == null) {
+    res.status(400).json({
+      title: 'Bad Request',
+      status: 400,
+      detail: 'Both compressions and breaths are required.'
+    });
+    return;
+  }
+
+  try {
+    const metronome = createMetronome({
+      compressions,
+      breaths,
+      singleRescuer
+    });
+
+    console.log(`incident ${req.params.id} TANR metronome configured: ${metronome.label}.`);
+    res.json(metronome);
+  } catch (error) {
+    res.status(400).json({
+      title: 'Bad Request',
+      status: 400,
+      detail: error.message
+    });
+  }
 });
 
 app.listen(port, () => {
